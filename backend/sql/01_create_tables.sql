@@ -1,4 +1,6 @@
 -- Database Schema for Project Proposal Management System
+SET CLIENT_ENCODING TO 'UTF8';
+
 -- Drop tables if they exist (for clean re-runs)
 DROP TABLE IF EXISTS proposta_palavra_chave CASCADE;
 DROP TABLE IF EXISTS proposta_coorientador CASCADE;
@@ -13,6 +15,7 @@ CREATE TABLE docente (
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(20) DEFAULT 'DOCENTE' CHECK (role IN ('DOCENTE', 'ADMIN')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -22,18 +25,6 @@ CREATE TABLE palavra_chave (
     palavra VARCHAR(100) NOT NULL UNIQUE
 );
 
--- Table: proposta (Project Proposal)
-CREATE TABLE proposta (
-    id_proposta SERIAL PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    descricao_objetivos TEXT NOT NULL,
-    id_orientador INTEGER NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_orientador FOREIGN KEY (id_orientador) 
-        REFERENCES docente(id_docente) ON DELETE CASCADE
-);
-
 -- Table: aluno (Student)
 CREATE TABLE aluno (
     id_aluno SERIAL PRIMARY KEY,
@@ -41,10 +32,28 @@ CREATE TABLE aluno (
     email VARCHAR(255) NOT NULL UNIQUE,
     numero VARCHAR(50) NOT NULL UNIQUE,
     id_proposta INTEGER,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_proposta FOREIGN KEY (id_proposta) 
-        REFERENCES proposta(id_proposta) ON DELETE SET NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Table: proposta (Project Proposal)
+CREATE TABLE proposta (
+    id_proposta SERIAL PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    descricao_objetivos TEXT NOT NULL,
+    id_orientador INTEGER NOT NULL,
+    id_aluno INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_orientador FOREIGN KEY (id_orientador) 
+        REFERENCES docente(id_docente) ON DELETE CASCADE,
+    CONSTRAINT fk_aluno FOREIGN KEY (id_aluno)
+        REFERENCES aluno(id_aluno) ON DELETE SET NULL
+);
+
+-- Add foreign key constraint to aluno table after proposta is created
+ALTER TABLE aluno 
+    ADD CONSTRAINT fk_proposta FOREIGN KEY (id_proposta) 
+        REFERENCES proposta(id_proposta) ON DELETE SET NULL;
 
 -- Table: proposta_coorientador (Proposal Co-Advisor - Many-to-Many)
 CREATE TABLE proposta_coorientador (

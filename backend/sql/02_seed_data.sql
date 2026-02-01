@@ -1,12 +1,17 @@
 -- Seed Data for Development and Testing
 -- Note: Passwords are hashed using bcrypt with 10 rounds
+SET CLIENT_ENCODING TO 'UTF8';
 
 -- Insert sample professors (password for all: "password123")
-INSERT INTO docente (nome, email, password_hash) VALUES
-('Dr. João Silva', 'joao.silva@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq'),
-('Dr. Maria Santos', 'maria.santos@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq'),
-('Dr. Pedro Costa', 'pedro.costa@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq'),
-('Dr. Ana Rodrigues', 'ana.rodrigues@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq');
+INSERT INTO docente (nome, email, password_hash, role) VALUES
+('Dr. João Silva', 'joao.silva@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq', 'DOCENTE'),
+('Dr. Maria Santos', 'maria.santos@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq', 'DOCENTE'),
+('Dr. Pedro Costa', 'pedro.costa@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq', 'DOCENTE'),
+('Dr. Ana Rodrigues', 'ana.rodrigues@university.edu', '$2b$10$RFVtWynKJ3qGDOSOkkpQpeF3/8fZRnd04AdMJ1..BgE9PS8ZKOnyq', 'DOCENTE');
+
+-- Insert admin user (password: "admin123")
+INSERT INTO docente (nome, email, password_hash, role) VALUES
+('Admin Sistema', 'admin@university.edu', '$2b$10$vDDRO8ZyTmKz5MtVSXYTbeoCVLTbx.8gcFUnBgLCaU0BJV22QwRLm', 'ADMIN');
 
 -- Insert sample keywords
 INSERT INTO palavra_chave (palavra) VALUES
